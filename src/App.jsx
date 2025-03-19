@@ -1,32 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import Card from './card.jsx';
+import Cipher from './img/cipher.png';
+import Box from '@mui/material/Box';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import './css/origin.css';
 import './css/style.css';
 
 function App() {
-  const [isRotating, setIsRotating] = useState(false);
+  const [rotationAngle, setRotationAngle] = useState(0);
+  const [inputText, setInputText] = useState('');
+  const [isGrabbing, setIsGrabbing] = useState(false);
+  const isDragging = useRef(false);
+  const previousMousePosition = useRef({ x: 0, y: 0 });
 
-  const rotation = () => {
-    setIsRotating(!isRotating);
+  const handleMouseDown = (event) => {
+    isDragging.current = true;
+    setIsGrabbing(true);
+    previousMousePosition.current = { x: event.clientX, y: event.clientY };
+  };
+
+  const handleMouseMove = (event) => {
+    if (isDragging.current) {
+      const deltaX = event.clientX - previousMousePosition.current.x;
+      setRotationAngle((prevAngle) => prevAngle + deltaX * 0.01);
+      previousMousePosition.current = { x: event.clientX, y: event.clientY };
+    }
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+    setIsGrabbing(false);
+  };
+
+  const handleInputChange = (event) => {
+    setInputText(event.target.value);
   };
 
   return (
     <>
-      <Canvas>
-        <ambientLight intensity={0.25} />
-        <pointLight position={[10, 10, 10]} intensity={0.5} />
-        <directionalLight position={[-5, 5, 5]} intensity={0.5} />
-        <spotLight position={[0, 5, 5]} angle={0.3} intensity={0.7} />
-        <Card position={[0, 0, 0]} isRotating={isRotating} />
+      <Canvas
+        className={`z-0 ${isGrabbing ? 'cursor-grabbing' : 'cursor-grab'}`}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+      >
+        <ambientLight intensity={0.35} />
+        <pointLight position={[10, 10, 10]} intensity={0.225} />
+        <directionalLight position={[-5, 5, 5]} intensity={0.225} />
+        <spotLight position={[0, 5, 5]} angle={0.3} intensity={1} />
+        <Card position={[0, 1, 0]} rotationAngle={rotationAngle} text={inputText} />
       </Canvas>
-      <div className='fixed top-1/2 left-1/2 select-none'>
-        <button
-          className=' w-fit h-fit border-2 bg-amber-500 text-white p-3 flex justify-center items-center rounded-md cursor-pointer cursor-pointer'
-          onClick={rotation}
+      <img src={Cipher} />
+      <div className='fixed top-4/6 left-0 w-full h-auto flex justify-self-center items-center flex-col gap-y-1.5 z-10'>
+        <p className='font-Pigpen-Regular text-amber-300 select-none'>Please enter text</p>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '5px',
+          }}
         >
-          Click Rotate
-        </button>
+          <OutlinedInput
+            value={inputText}
+            onChange={handleInputChange}
+            sx={{
+              width: 'fit-content',
+              backgroundColor: 'hsla(0deg, 0%, 100%, 10%)',
+              color: 'white',
+              borderRadius: '5px',
+              outline: 'none',
+            }}
+          />
+          <HelpOutlineIcon
+            sx={{
+              position: 'fixed',
+              transform: 'translate(500%, 0)',
+              color: 'white',
+              cursor: 'pointer',
+            }}
+          />
+        </Box>
       </div>
     </>
   );
