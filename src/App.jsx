@@ -9,7 +9,7 @@ import './css/origin.css';
 import './css/style.css';
 
 function App() {
-  const [rotationAngle, setRotationAngle] = useState(0);
+  const [rotationAngle, setRotationAngle] = useState({ x: 0, y: 0, z: 0 });
   const [inputText, setInputText] = useState('');
   const [isGrabbing, setIsGrabbing] = useState(false);
   const isDragging = useRef(false);
@@ -24,11 +24,15 @@ function App() {
   const handleMouseMove = (event) => {
     if (isDragging.current) {
       const deltaX = event.clientX - previousMousePosition.current.x;
-      setRotationAngle((prevAngle) => prevAngle + deltaX * 0.01);
+      const deltaY = event.clientY - previousMousePosition.current.y;
+      setRotationAngle((prevRotation) => ({
+        x: (prevRotation.x + deltaY * 0.01) % (2 * Math.PI),
+        y: (prevRotation.y + deltaX * 0.01) % (2 * Math.PI),
+        z: prevRotation.z,
+      }));
       previousMousePosition.current = { x: event.clientX, y: event.clientY };
     }
   };
-
   const handleMouseUp = () => {
     isDragging.current = false;
     setIsGrabbing(false);
@@ -45,11 +49,12 @@ function App() {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
+        shadows
       >
-        <ambientLight intensity={0.35} />
-        <pointLight position={[10, 10, 10]} intensity={0.225} />
-        <directionalLight position={[-5, 5, 5]} intensity={0.225} />
-        <spotLight position={[0, 5, 5]} angle={0.3} intensity={1} />
+        <ambientLight intensity={0.6} />
+        <pointLight position={[10, 10, 10]} intensity={0.225} castShadow />
+        <directionalLight position={[-5, 5, 5]} intensity={0.225} castShadow />
+        <spotLight position={[0, 5, 5]} angle={0.3} intensity={1} castShadow />
         <Card position={[0, 1, 0]} rotationAngle={rotationAngle} text={inputText} />
       </Canvas>
       <img src={Cipher} />
