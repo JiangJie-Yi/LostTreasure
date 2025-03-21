@@ -1,10 +1,10 @@
 @font-face {
   font-family: "Pigpen-Regular";
-  src: url("/fonts/Pigpen-Regular.ttf") format("truetype");
+  src: url("/src/public/fonts/Pigpen-Regular.ttf") format("truetype");
 }
 @font-face {
   font-family: "PigPenCodeFont";
-  src: url("/fonts/PigPenCodeFont.ttf") format("truetype");
+  src: url("/src/public/fonts/PigPenCodeFont.ttf") format("truetype");
 }
 html,
 body {
