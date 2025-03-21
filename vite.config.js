@@ -6,5 +6,5 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [tailwindcss(), react()],
   base: '/LostTreasure/',
-  assetsInclude: ['**/*.ttf']
+  assetsInclude: ['**/*.ttf'],
 });
