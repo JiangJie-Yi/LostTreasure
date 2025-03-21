@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Pigpen-Regular';
-  src: url('/LostTreasure/fonts/Pigpen-Regular.ttf') format('truetype');
+  src: url('@/assets/Pigpen-Regular.ttf') format('truetype');
 }
 @font-face {
   font-family: 'PigPenCodeFont';
-  src: url('/LostTreasure/fonts/Pigpen-Regular.ttf') format('truetype');
+  src: url('@/assets/PigPenCodeFont.ttf') format('truetype');
 }
 html,
 body {
