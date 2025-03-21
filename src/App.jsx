@@ -1,32 +1,31 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Message from './components/message.jsx';
 import DisplayObject from './components/displayObject.jsx';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { createGlobalStyle } from 'styled-components';
 import './scss/css/origin.css';
 import './scss/css/style.css';
-import Fonts from './fontsStyle.js'
 
 function App() {
+  const dispatch = useDispatch();
   const [rotationAngle, setRotationAngle] = useState({ x: 0, y: 0, z: 0 });
   const [description, setDescription] = useState('');
+  const [object, setObject] = useState('');
   const [inputText, setInputText] = useState('');
 
-  const FontStyle = createGlobalStyle`${Fonts.styles}`;
-
-  
   const handleInputChange = (event) => {
-    setInputText(event.target.value);
+    dispatch(setInputText(event.target.value));
   };
 
   return (
     <>
-      <Message description={description} />
+      <Message descriptionCt={description} objectName={object} />
       <DisplayObject
         rotationAngle={rotationAngle}
         setRotationAngle={setRotationAngle}
+        setObject={setObject}
         setDescription={setDescription}
       />
       <div className='fixed bottom-1/8 left-0 w-full h-auto flex justify-self-center items-center flex-col gap-y-1.5 z-10'>

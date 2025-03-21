@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import Card from './card';
 
-function DisplayObject({ rotationAngle, setRotationAngle, setDescription }) {
+function DisplayObject({ rotationAngle, setRotationAngle, setDescription, setObject }) {
   const isDragging = useRef(false);
   const previousMousePosition = useRef({ x: 0, y: 0 });
   const [isGrabbing, setIsGrabbing] = useState(false);
@@ -58,7 +58,12 @@ function DisplayObject({ rotationAngle, setRotationAngle, setDescription }) {
         target-position={[0, 0, 0]}
         castShadow
       />
-      <Card position={[0, 0.1, 0]} rotationAngle={rotationAngle} setDescription={setDescription} />
+      <Card
+        position={[0, 0.1, 0]}
+        rotationAngle={rotationAngle}
+        setObject={setObject}
+        setDescription={setDescription}
+      />
       <OrbitControls minDistance={4} maxDistance={7} />
     </Canvas>
   );

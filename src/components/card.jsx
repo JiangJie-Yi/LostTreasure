@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { TextureLoader, ClampToEdgeWrapping, DoubleSide } from 'three';
+import { TextureLoader, ClampToEdgeWrapping } from 'three';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import PaperMaterialFront from '../public/img/paperMaterial_front.png';
@@ -8,7 +8,7 @@ import Cipher from '../public/img/cipher.png';
 import '../scss/css/origin.css';
 import Fonts from '../fontsStyle.js';
 
-function Card({ position, rotationAngle, text, setDescription }) {
+function Card({ position, rotationAngle, text, setDescription, setObject }) {
   const meshRef = useRef();
   const mapFrontTexture = useLoader(TextureLoader, PaperMaterialFront);
   const mapBackTexture = useLoader(TextureLoader, PaperMaterialBack);
@@ -31,6 +31,7 @@ function Card({ position, rotationAngle, text, setDescription }) {
   mapBackTexture.wrapS = mapBackTexture.wrapT = ClampToEdgeWrapping;
 
   useFrame(() => {
+    setObject('砂輪機操作文件');
     if (meshRef.current) {
       meshRef.current.rotation.x = rotationAngle.x;
       meshRef.current.rotation.y = rotationAngle.y;
