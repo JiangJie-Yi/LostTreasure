@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import { TextureLoader, ClampToEdgeWrapping, DoubleSide } from 'three';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
-import PaperMaterialFront from '../img/paperMaterial_front.png';
-import PaperMaterialBack from '../img/paperMaterial_back.png';
-import Cipher from '../img/cipher.png';
+import PaperMaterialFront from '../public/img/paperMaterial_front.png';
+import PaperMaterialBack from '../public/img/paperMaterial_back.png';
+import Cipher from '../public/img/cipher.png';
 import '../scss/css/origin.css';
 
 function Card({ position, rotationAngle, text, setDescription }) {
