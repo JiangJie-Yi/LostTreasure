@@ -6,6 +6,7 @@ import PaperMaterialFront from '../public/img/paperMaterial_front.png';
 import PaperMaterialBack from '../public/img/paperMaterial_back.png';
 import Cipher from '../public/img/cipher.png';
 import '../scss/css/origin.css';
+import Fonts from '../fontsStyle.js';
 
 function Card({ position, rotationAngle, text, setDescription }) {
   const meshRef = useRef();
@@ -84,7 +85,7 @@ function Card({ position, rotationAngle, text, setDescription }) {
         color='hsla(0, 0%, 0%, 0.8)'
         anchorX='left'
         anchorY='top'
-        font='./src/font/Pigpen-Regular.ttf'
+        font={Fonts.fontUrl}
       >
         {text}
       </Text>
