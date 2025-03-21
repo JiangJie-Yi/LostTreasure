@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Card from './components/card.jsx';
 import Message from './components/message.jsx';
 import DisplayObject from './components/displayObject.jsx';
 import Box from '@mui/material/Box';
