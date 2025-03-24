@@ -6,3 +6,5 @@ const mesgSlice = createSlice({
     mesg: '',
   },
 });
+
+export default mesgSlice.reducer;

@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const uiSlice = createSlice({
-  name: 'ui',
+  name: '3Dmodule',
   initialState,
   reducers: {
     setDescription: (state, action) => {
