@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 function MouseTrigger(setRotationAngle) {
   const isDragging = useRef(false);
   const previousMousePosition = useRef({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
+  const [isHoveringObject, setIsHoveringObject] = useState(false);
   const [isBackFacing, setIsBackFacing] = useState(false);
 
   const handleMouseDown = (event) => {
@@ -29,8 +29,8 @@ function MouseTrigger(setRotationAngle) {
   };
 
   return {
-    isHovering,
-    setIsHovering,
+    isHoveringObject,
+    setIsHoveringObject,
     isBackFacing,
     setIsBackFacing,
     handleMouseDown,

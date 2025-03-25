@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { TextureLoader, ClampToEdgeWrapping } from 'three';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
+import { useSelector } from 'react-redux';
 import PaperMaterialFront from '../public/img/paperMaterial_front.png';
 import PaperMaterialBack from '../public/img/paperMaterial_back.png';
 import Cipher from '../public/img/cipher.png';
@@ -12,11 +13,13 @@ function MdFile({
   position,
   rotationAngle,
   text,
-  setDescription,
-  setObject,
-  setIsHovering,
-  setIsBackFacing,
+  setObjectCh,
+  setDescriptionCh,
+  setIsHoveringObjectCh,
+  setIsBackFacingCh,
 }) {
+  const { props, descriptionContent } = useSelector((state) => state.textString);
+  const [currentSegment, setCurrentSegment] = React.useState(null);
   const meshRef = useRef();
   const mapFrontTexture = useLoader(TextureLoader, PaperMaterialFront);
   const mapBackTexture = useLoader(TextureLoader, PaperMaterialBack);
@@ -39,18 +42,46 @@ function MdFile({
   mapBackTexture.wrapS = mapBackTexture.wrapT = ClampToEdgeWrapping;
 
   useFrame(() => {
-    setObject('砂輪機操作文件');
+    setObjectCh(props.OBJECT_NAME);
+    const normalizeAngle = (angle) => {
+      while (angle < -Math.PI) angle += 2 * Math.PI; // 如果角度小於 -180°，加回到範圍內
+      while (angle > Math.PI) angle -= 2 * Math.PI; // 如果角度大於 180°，減回到範圍內
+      return angle;
+    };
+
+    const getSegment = (angle) => {
+      if (angle >= -Math.PI / 4 && angle <= Math.PI / 4) {
+        return 0; // 正面：-45° - 45°
+      } else if (angle > Math.PI / 4 && angle <= (3 * Math.PI) / 4) {
+        return 1; // 反面：45° - 135°
+      } else if (angle > (3 * Math.PI) / 4 || angle <= -(3 * Math.PI) / 4) {
+        return 2; // 正面：135° - 180° 或 -180° - -135°
+      } else if (angle > -(3 * Math.PI) / 4 && angle < -Math.PI / 4) {
+        return 3; // 反面：-135° - -45°
+      }
+      return -1; // 無效區間
+    };
     if (meshRef.current) {
       meshRef.current.rotation.x = rotationAngle.x;
       meshRef.current.rotation.y = rotationAngle.y;
       meshRef.current.rotation.z = rotationAngle.z;
 
-      if (rotationAngle.y > Math.PI / 2 || rotationAngle.y < -Math.PI / 2) {
-        setDescription('『 共濟會密碼符號 』');
-        setIsBackFacing(true);
-      } else {
-        setDescription('感覺像是一張工業安全的指導文件');
-        setIsBackFacing(false);
+      // 標準化角度到 -Math.PI ~ Math.PI
+      const normalizedY = normalizeAngle(rotationAngle.y);
+      // 獲取當前區間
+      const segment = getSegment(normalizedY);
+
+      // 如果進入新的區間，執行切換邏輯
+      if (segment !== currentSegment) {
+        setCurrentSegment(segment); // 更新當前區間
+
+        if (segment === 0 || segment === 2) {
+          setDescriptionCh(descriptionContent.OBJECT_FRONT);
+          setIsBackFacingCh(false);
+        } else if (segment === 1 || segment === 3) {
+          setDescriptionCh(descriptionContent.OBJECT_BACK);
+          setIsBackFacingCh(true);
+        }
       }
     }
   });
@@ -67,10 +98,10 @@ function MdFile({
           ref={meshRef}
           position={position}
           onPointerOver={() => {
-            setIsHovering(true);
+            setIsHoveringObjectCh(true);
           }}
           onPointerOut={() => {
-            setIsHovering(false);
+            setIsHoveringObjectCh(false);
           }}
         >
           <boxGeometry args={[1, 1, 1]} />

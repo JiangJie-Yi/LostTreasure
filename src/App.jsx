@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Message from './components/message.jsx';
+import ObjectDescription from './components/objectDescription.jsx';
 import Module from './components/module.jsx';
 import TextInpBox from './components/textInpBox.jsx';
 import './scss/css/origin.css';
@@ -12,7 +12,9 @@ function App() {
 
   return (
     <>
-      <Message descriptionCt={description} objectName={object} />
+      <ObjectDescription
+        descriptionContent={description}
+        props={object} />
       <Module
         rotationAngle={rotationAngle}
         setRotationAngle={setRotationAngle}
