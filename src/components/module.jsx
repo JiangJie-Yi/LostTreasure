@@ -1,14 +1,17 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import { Text } from '@react-three/drei';
 import MouseTrigger from './function/mouseTrigger';
 import MdFile from './mdFile';
+import Fonts from '../fontsStyle.js';
 
 function Module({
   rotationAngle,
   setRotationAngle,
   setObjectChildModule,
   setDescriptionChildModule,
+  // text
 }) {
   const {
     isHoveringObject,
@@ -62,6 +65,18 @@ function Module({
           setIsHoveringObjectChildMdfile={setIsHoveringObject}
           setIsBackFacingChildMdfile={setIsBackFacing}
         />
+        {/* <Text
+          position={[-1.25, 2, 0.01]}
+          fontSize={0.4}
+          maxWidth={1}
+          lineHeight={1.2}
+          color='hsla(0, 0%, 0%, 0.8)'
+          anchorX='left'
+          anchorY='top'
+          font={Fonts.fontUrl}
+        >
+          {text}
+        </Text> */}
         <OrbitControls minDistance={4} maxDistance={7} />
       </Canvas>
     </>

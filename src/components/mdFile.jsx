@@ -1,18 +1,16 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { TextureLoader, ClampToEdgeWrapping } from 'three';
 import { useFrame, useLoader } from '@react-three/fiber';
-import { Text } from '@react-three/drei';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setDisplayState } from '../slice/textStringSlice.js';
 import PaperMaterialFront from '../public/img/paperMaterial_front.png';
 import PaperMaterialBack from '../public/img/paperMaterial_back.png';
 import Cipher from '../public/img/cipher.png';
 import '../scss/css/origin.css';
-import Fonts from '../fontsStyle.js';
 
 function MdFile({
   position,
   rotationAngle,
-  text,
   setObjectChildMdfile,
   setDescriptionChildMdfile,
   setIsHoveringObjectChildMdfile,
@@ -20,12 +18,17 @@ function MdFile({
 }) {
   const propsName = useSelector((state) => state.textString.propsName);
   const descriptionContent = useSelector((state) => state.textString.descriptionContent);
+
+  const dispatch = useDispatch();
+  // const singleDisplayText = useSelector((state) => state.textString.singleDisplayText);
+  // const handleFlip = () => {
+  //   if (!singleDisplayText) {
+  //     dispatch(setDisplayState('這段文字只顯示一次'));
+  //   }
+  // };
+
   const [currentSegment, setCurrentSegment] = React.useState(null);
   const meshRef = useRef();
-
-  React.useEffect(() => {
-    console.log('物件內容', propsName, descriptionContent);
-  }, [propsName, descriptionContent]);
 
   const mapFrontTexture = useLoader(TextureLoader, PaperMaterialFront);
   const mapBackTexture = useLoader(TextureLoader, PaperMaterialBack);
@@ -70,10 +73,8 @@ function MdFile({
 
       // 標準化角度到 -Math.PI ~ Math.PI
       const normalizedY = normalizeAngle(rotationAngle.y);
-      // 獲取當前區間
       const segment = getSegment(normalizedY);
 
-      // useEffect(() => {
       if (segment !== currentSegment) {
         setCurrentSegment(segment);
         if (segment === 0 || segment === 2) {
@@ -81,7 +82,7 @@ function MdFile({
           setObjectChildMdfile(propsName.GRINDING_MACHINE_OPERATION_FILE_1);
           setDescriptionChildMdfile(descriptionContent.GRINDING_MACHINE_OPERATION_FILE_FRONT);
           setTimeout(() => {
-            setDescriptionChildMdfile();
+            setDescriptionChildMdfile('');
           }, 1750);
         } else if (segment === 1 || segment === 3) {
           setIsBackFacingChildMdfile(true);
@@ -93,7 +94,7 @@ function MdFile({
               setDescriptionChildMdfile(descriptionContent.GRINDING_MACHINE_OPERATION_FILE_BACK_3);
               setTimeout(() => {
                 setObjectChildMdfile(propsName.GRINDING_MACHINE_OPERATION_FILE_2);
-                setDescriptionChildMdfile();
+                setDescriptionChildMdfile('');
               }, 1750);
             }, 1750);
           }, 1750);
@@ -111,6 +112,7 @@ function MdFile({
         rotation={[Math.PI / 4, Math.PI / 4, 0]}
       >
         <mesh
+          // onClick={handleFlip}
           ref={meshRef}
           position={position}
           onPointerOver={() => {
@@ -147,18 +149,6 @@ function MdFile({
             <meshBasicMaterial map={textTexture} transparent={true} opacity={0.6} />
           </mesh>
         </mesh>
-        <Text
-          position={[-1.25, 2, 0.01]}
-          fontSize={0.4}
-          maxWidth={1}
-          lineHeight={1.2}
-          color='hsla(0, 0%, 0%, 0.8)'
-          anchorX='left'
-          anchorY='top'
-          font={Fonts.fontUrl}
-        >
-          {text}
-        </Text>
       </group>
     </>
   );

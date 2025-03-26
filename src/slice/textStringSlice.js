@@ -20,11 +20,11 @@ const textStringSlice = createSlice({
   name: 'textString',
   initialState,
   reducers: {
-    setDescription(state, action) {
+    setDisplayState(state, action) {
       state.currentDisplayState = action.payload;
     },
   },
 });
 
-export const { setDescription } = textStringSlice.actions;
+export const { setDisplayState } = textStringSlice.actions;
 export default textStringSlice.reducer;
