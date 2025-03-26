@@ -4,12 +4,17 @@ import { OrbitControls } from '@react-three/drei';
 import MouseTrigger from './function/mouseTrigger';
 import MdFile from './mdFile';
 
-function Module({ rotationAngle, setRotationAngle, setDescription, setObject }) {
+function Module({
+  rotationAngle,
+  setRotationAngle,
+  setObjectChildModule,
+  setDescriptionChildModule,
+}) {
   const {
     isHoveringObject,
-    setIsHoveringObject,
     isBackFacing,
     setIsBackFacing,
+    setIsHoveringObject,
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
@@ -52,10 +57,10 @@ function Module({ rotationAngle, setRotationAngle, setDescription, setObject }) 
         <MdFile
           position={[0, 0, 0]}
           rotationAngle={rotationAngle}
-          setObjectCh={setObject}
-          setDescriptionCh={setDescription}
-          setIsHoveringObjectCh={setIsHoveringObject}
-          setIsBackFacingCh={setIsBackFacing}
+          setObjectChildMdfile={setObjectChildModule}
+          setDescriptionChildMdfile={setDescriptionChildModule}
+          setIsHoveringObjectChildMdfile={setIsHoveringObject}
+          setIsBackFacingChildMdfile={setIsBackFacing}
         />
         <OrbitControls minDistance={4} maxDistance={7} />
       </Canvas>

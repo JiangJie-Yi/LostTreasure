@@ -5,7 +5,7 @@ import textStringReducer from './slice/textStringSlice.js';
 const store = configureStore({
   reducer: {
     module: moduleReducer,
-    textString: textStringReducer
+    textString: textStringReducer,
   },
 });
 

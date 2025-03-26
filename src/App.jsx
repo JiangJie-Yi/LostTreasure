@@ -7,21 +7,18 @@ import './scss/css/style.css';
 
 function App() {
   const [rotationAngle, setRotationAngle] = useState({ x: 0, y: 0, z: 0 });
-  const [description, setDescription] = useState('');
   const [object, setObject] = useState('');
+  const [description, setDescription] = useState('');
 
   return (
     <>
-      <ObjectDescription
-        descriptionContent={description}
-        props={object} />
+      <ObjectDescription propsName={object} descriptionContent={description} />
       <Module
         rotationAngle={rotationAngle}
         setRotationAngle={setRotationAngle}
-        setObject={setObject}
-        setDescription={setDescription}
+        setObjectChildModule={setObject}
+        setDescriptionChildModule={setDescription}
       />
-      {/* <TextInpBox /> */}
     </>
   );
 }

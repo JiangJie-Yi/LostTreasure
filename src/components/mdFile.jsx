@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { TextureLoader, ClampToEdgeWrapping } from 'three';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
@@ -13,36 +13,37 @@ function MdFile({
   position,
   rotationAngle,
   text,
-  setObjectCh,
-  setDescriptionCh,
-  setIsHoveringObjectCh,
-  setIsBackFacingCh,
+  setObjectChildMdfile,
+  setDescriptionChildMdfile,
+  setIsHoveringObjectChildMdfile,
+  setIsBackFacingChildMdfile,
 }) {
-  const { props, descriptionContent } = useSelector((state) => state.textString);
+  const propsName = useSelector((state) => state.textString.propsName);
+  const descriptionContent = useSelector((state) => state.textString.descriptionContent);
   const [currentSegment, setCurrentSegment] = React.useState(null);
   const meshRef = useRef();
+
+  React.useEffect(() => {
+    console.log('物件內容', propsName, descriptionContent);
+  }, [propsName, descriptionContent]);
+
   const mapFrontTexture = useLoader(TextureLoader, PaperMaterialFront);
   const mapBackTexture = useLoader(TextureLoader, PaperMaterialBack);
   const textTexture = useLoader(TextureLoader, Cipher);
 
   mapFrontTexture.wrapS = ClampToEdgeWrapping;
   mapFrontTexture.wrapT = ClampToEdgeWrapping;
-
   mapFrontTexture.offset.set(0, 0);
   mapFrontTexture.repeat.set(1, 1);
-
   mapFrontTexture.wrapS = mapFrontTexture.wrapT = ClampToEdgeWrapping;
 
   mapBackTexture.wrapS = ClampToEdgeWrapping;
   mapBackTexture.wrapT = ClampToEdgeWrapping;
-
   mapBackTexture.offset.set(0, 0);
   mapBackTexture.repeat.set(1, 1);
-
   mapBackTexture.wrapS = mapBackTexture.wrapT = ClampToEdgeWrapping;
 
   useFrame(() => {
-    setObjectCh(props.OBJECT_NAME);
     const normalizeAngle = (angle) => {
       while (angle < -Math.PI) angle += 2 * Math.PI; // 如果角度小於 -180°，加回到範圍內
       while (angle > Math.PI) angle -= 2 * Math.PI; // 如果角度大於 180°，減回到範圍內
@@ -61,6 +62,7 @@ function MdFile({
       }
       return -1; // 無效區間
     };
+
     if (meshRef.current) {
       meshRef.current.rotation.x = rotationAngle.x;
       meshRef.current.rotation.y = rotationAngle.y;
@@ -71,16 +73,30 @@ function MdFile({
       // 獲取當前區間
       const segment = getSegment(normalizedY);
 
-      // 如果進入新的區間，執行切換邏輯
+      // useEffect(() => {
       if (segment !== currentSegment) {
-        setCurrentSegment(segment); // 更新當前區間
-
+        setCurrentSegment(segment);
         if (segment === 0 || segment === 2) {
-          setDescriptionCh(descriptionContent.OBJECT_FRONT);
-          setIsBackFacingCh(false);
+          setIsBackFacingChildMdfile(false);
+          setObjectChildMdfile(propsName.GRINDING_MACHINE_OPERATION_FILE_1);
+          setDescriptionChildMdfile(descriptionContent.GRINDING_MACHINE_OPERATION_FILE_FRONT);
+          setTimeout(() => {
+            setDescriptionChildMdfile();
+          }, 1750);
         } else if (segment === 1 || segment === 3) {
-          setDescriptionCh(descriptionContent.OBJECT_BACK);
-          setIsBackFacingCh(true);
+          setIsBackFacingChildMdfile(true);
+          setObjectChildMdfile();
+          setDescriptionChildMdfile(descriptionContent.GRINDING_MACHINE_OPERATION_FILE_BACK_1);
+          setTimeout(() => {
+            setDescriptionChildMdfile(descriptionContent.GRINDING_MACHINE_OPERATION_FILE_BACK_2);
+            setTimeout(() => {
+              setDescriptionChildMdfile(descriptionContent.GRINDING_MACHINE_OPERATION_FILE_BACK_3);
+              setTimeout(() => {
+                setObjectChildMdfile(propsName.GRINDING_MACHINE_OPERATION_FILE_2);
+                setDescriptionChildMdfile();
+              }, 1750);
+            }, 1750);
+          }, 1750);
         }
       }
     }
@@ -98,10 +114,10 @@ function MdFile({
           ref={meshRef}
           position={position}
           onPointerOver={() => {
-            setIsHoveringObjectCh(true);
+            setIsHoveringObjectChildMdfile(true);
           }}
           onPointerOut={() => {
-            setIsHoveringObjectCh(false);
+            setIsHoveringObjectChildMdfile(false);
           }}
         >
           <boxGeometry args={[1, 1, 1]} />
